@@ -15,7 +15,7 @@ namespace DeathNote.Model
             set { id = value; base.OnPropertyChanged(); }
         }
 
-        private string description;
+        private string description; 
         public string Description {
             get { return description; }
             set { description = value; base.OnPropertyChanged(); }
