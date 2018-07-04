@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace DeathNote.Model
 {
     public class Person : BindableObject
     {
         private int id;
-        [Key]
         public int Id {
             get { return id; }
             set { id = value; base.OnPropertyChanged(); }
@@ -28,12 +26,6 @@ namespace DeathNote.Model
         public string Image {
             get { return image; }
             set { image = value; base.OnPropertyChanged(); }
-        }
-
-        private int noteId;
-        public int NoteId {
-            get { return noteId; }
-            set { noteId = value; base.OnPropertyChanged(); }
         }
 
         public Note Note { get; set; }

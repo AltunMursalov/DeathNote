@@ -1,9 +1,11 @@
 ﻿using DeathNote.Model;
+using Newtonsoft.Json;
 using DeathNote.Services.EF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,26 +20,27 @@ namespace DeathNote.View
         public ObservableCollection<Note> DeathNotes { get; set; }
         public Notes()
         {
+            DeathNotes = new ObservableCollection<Note>();
             InitializeComponent();
             this.BindingContext = this;
-            DeathNotes = new ObservableCollection<Note>();
-            Note note = new Note() {
-                Date = DateTime.Now,
-                Description = "Default",
-                Person = new Person() {
-                    Name = "Dawn",
-                    Surname = "Dawnech",
-                    NoteId = 1,
-                    Image = "Default"
+
+        }
+
+        private async void GetData()
+        {
+            using (HttpClient client = new HttpClient()) {
+                var res = await client.GetAsync("http://localhost:64786/api/values/hakuna");
+                var data = await res.Content.ReadAsStringAsync();
+                var notes = JsonConvert.DeserializeObject<List<Note>>(data);
+                foreach (var note in notes) {
+                    this.DeathNotes.Add(note);
                 }
-            };
-            this.DeathNotes.Add(note);
-            using (DatabaseContext context = new DatabaseContext()) {
-                context.Notes.Add(note);
-                var random = context.Notes.FirstOrDefault(n => n.Description == "Default");
-                this.DisplayAlert(random.Date.ToShortDateString(), random.Description, "OK");
-                context.SaveChanges();
             }
+        }
+
+        private async void PostData()
+        {
+
         }
     }
 }
